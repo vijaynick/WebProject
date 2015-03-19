@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="content">
+		<h:form id="configureReport">
+
+
+
+			<ui:include src="../../templates/menu.xhtml"></ui:include>
+
+
+			<p:panel
+				style="background-color:#E4EEFC;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:outputLabel
+					style="font-size: 12px;height: 22px;font-weight:bold;"
+					value="Configure Report"></p:outputLabel>
+			</p:panel>
+
+			<h:panelGroup id="messages_delete"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+			<p:panelGrid id="searchPG" columns="4"
+				style="width:100%;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				
+				
+
+				<h:outputLabel value="#{msg['enityAdd.add.governrate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="governrate_cmb" filter="true"
+					filterMatchMode="contains"
+					value="#{reportConfigurationBean.governarateVO.id}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.governrateList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+					</c:if>
+					
+					<p:ajax process="governrate_cmb" partialSubmit="true"
+					event="valueChange" update="directorate_cmb"
+					listener="#{reportConfigurationBean.onChangeOfGovCombo(reportConfigurationBean.governarateVO.id)}" />
+					
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.directorate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="directorate_cmb" filter="true"
+					filterMatchMode="contains"
+					value="#{reportConfigurationBean.directorateVO.id}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.directorateList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+					</c:if>
+				</p:selectOneMenu>
+
+
+
+
+			</p:panelGrid>
+
+			<p:panel
+				style="border-style:none;width:88%;direction:#{languageBean.locale=='ar' ? 'LTR':'RTL' }">
+				<table>
+					<tr>
+
+						<td><p:commandButton value="SearchDepartment" ajax="false"
+								actionListener="#{reportConfigurationBean.searchDepartments}" /></td>
+
+
+					</tr>
+				</table>
+
+
+			</p:panel>
+
+			<h3>Department OrderList</h3>
+
+
+			<p:orderList value="#{reportConfigurationBean.deptList}"
+				var="DepartmentVO" controlsLocation="left"
+				itemLabel="#{DepartmentVO.departmentName}"
+				itemValue="#{DepartmentVO.id}">
+			</p:orderList>
+
+
+			<p:commandButton value="SaveSortedList" ajax="false"
+				actionListener="#{reportConfigurationBean.saveSortedDepartments}" />
+
+
+
+
+
+		</h:form>
+		
+		
+
+
+	</ui:define>
+
+
+
+
+
+</ui:composition>

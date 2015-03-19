@@ -1,0 +1,258 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="content">
+		<h:form id="userSearch">
+
+
+
+			<ui:include src="../../templates/menu.xhtml"></ui:include>
+
+
+			<p:panel
+				style="background-color:#E4EEFC;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:outputLabel
+					style="font-size: 12px;height: 22px;font-weight:bold;"
+					value="#{msg['menu.searchandupdateuser']}"></p:outputLabel>
+			</p:panel>
+
+			<h:panelGroup id="messages_delete"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+			<p:panelGrid id="searchPG" columns="4"
+				style="width:100%;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+
+				<h:outputLabel value="#{msg['userAdd.add.loginid']}"
+					style="font-weight:bold" />
+				<p:inputText style="width:200px" id="loginid_txt"
+					value="#{userManagedBean.userVO.loginId}">
+				</p:inputText>
+
+
+				<h:outputLabel value="#{msg['userAdd.add.username']}"
+					style="font-weight:bold" />
+				<p:inputText value="#{userManagedBean.userVO.userName}"
+					style="width:200px" id="username_serach_txt">
+				</p:inputText>
+
+
+
+				<h:outputLabel value="#{msg['userAdd.add.email']}"
+					style="font-weight:bold" />
+				<p:inputText label="Email-ID"
+					value="#{userManagedBean.userVO.email}" style="width:200px"
+					id="email_txt">
+
+				</p:inputText>
+
+
+
+				<h:outputLabel value="#{msg['userAdd.add.mobile']}"
+					style="font-weight:bold" />
+				<p:inputMask value="#{userManagedBean.userVO.mobile}"
+					mask="99999999" style="width:200px" id="mobile_txt">
+				</p:inputMask>
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.governrate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="governorate" filter="true"
+					filterMatchMode="contains"
+					value="#{userManagedBean.userVO.governarateVO.id}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.governrateList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+					</c:if>
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.directorate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="directorate" filter="true"
+					filterMatchMode="contains"
+					value="#{userManagedBean.userVO.directorateVO.id}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.directorateList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+					</c:if>
+				</p:selectOneMenu>
+
+
+
+
+			</p:panelGrid>
+
+			<p:panel
+				style="border-style:none;width:88%;direction:#{languageBean.locale=='ar' ? 'LTR':'RTL' }">
+				<table>
+					<tr>
+
+						<td><p:selectOneRadio id="expOption"
+								value="#{userManagedBean.exportOption}">
+								<f:selectItem itemValue="PDF" itemLabel="PDF" />
+								<f:selectItem itemValue="HTML" itemLabel="HTML" />
+								<f:selectItem itemValue="DOCX" itemLabel="DOCX" />
+							</p:selectOneRadio></td>
+						<td><p:commandButton value="Report" ajax="false"
+								actionListener="#{userManagedBean.viewReport}" /></td>
+						<td><p:commandButton
+								value="#{msg['userSearch.search.search']}" icon="ui-icon-search"
+								process="@this,searchPG" update="searchGrid"
+								actionListener="#{userManagedBean.searchUsers}"
+								style="margin:0;align:right;width:100%" /></td>
+
+						<td><p:commandButton
+								value="#{msg['userSearch.search.reset']}" icon="ui-icon-refresh"
+								process="@this,searchPG"
+								update="searchPG,searchGrid,messages_delete"
+								actionListener="#{userManagedBean.resetSearchForm}"
+								style="margin:0;align:right;width:100%" /></td>
+
+						<td><p:commandButton oncomplete="PF('editUserDlg').show()"
+								value="#{msg['common.add']}" process="@this,searchPG"
+								update="@(#editUserDialog)" icon="ui-icon-plus" /></td>
+
+					</tr>
+				</table>
+
+
+			</p:panel>
+
+
+
+
+			<p:dataTable emptyMessage="#{msg['no.record.found']}" id="searchGrid"  sortMode="multiple"
+				var="userVo" paginatorPosition="bottom"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }"
+				value="#{userManagedBean.searchedList}"
+				paginator="#{fn:length(userManagedBean.searchedList)>8}" rows="8"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="2,4,10">
+				<c:if test="${!empty userManagedBean.searchedList}">
+					<p:column headerText="#{msg['userSearch.serach.loginid']}"
+						sortBy="#{userVo.loginId}">
+						<h:outputText value="#{userVo.loginId}" />
+					</p:column>
+
+					<p:column headerText="#{msg['userSearch.search.username']}"
+						sortBy="#{userVo.userName}">
+						<h:outputText value="#{userVo.userName}" />
+					</p:column>
+
+
+
+					<p:column headerText="#{msg['enityAdd.add.governrate']}"
+						width="200" styleClass="wrap">
+						<h:outputText value="#{userVo.governarateVO.govName}" />
+					</p:column>
+
+
+					<p:column headerText="#{msg['enityAdd.add.directorate']}"
+						width="200" styleClass="wrap">
+						<h:outputText value="#{userVo.directorateVO.direcotrateName}" />
+					</p:column>
+
+					<p:column headerText="#{msg['userSearch.search.mobile']}"
+						sortBy="#{userVo.mobile}">
+						<h:outputText value="#{userVo.mobile}" />
+					</p:column>
+
+					<p:column headerText="#{msg['userSearch.search.action']}"
+						width="100" style="align:center">
+						<center>
+							<h:panelGroup>
+
+								<p:commandButton icon="ui-icon-pencil"
+									oncomplete="PF('editUserDlg').show()" update="@(#editUserDialog)"
+									style="margin:0;align:right" id="editUser"
+									actionListener="#{userManagedBean.editUser}">
+									<f:param name="userId" value="#{userVo.userId}" />
+								</p:commandButton>
+
+
+
+								<h:outputText value="   "></h:outputText>
+								<p:commandButton icon="ui-icon-trash"
+									update=":userSearch:messages_delete,searchGrid"
+									action="#{userManagedBean.deleteUser(userVo.userId)}"
+									id="deleteUser">
+									<p:confirm header="Confirmation" message="Are you sure?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-refresh"
+									update=":userSearch:messages_delete,searchGrid"
+									action="#{userManagedBean.resetPassword()}" id="resetPassword">
+									<f:param name="userId" value="#{userVo.userId}" />
+									<p:confirm header="Confirmation"
+										message="Are you sure to reset password?" icon="ui-icon-alert" />
+								</p:commandButton>
+
+							</h:panelGroup>
+						</center>
+						<p:tooltip for="editUser" value="#{msg['common.edit']}"
+							showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="deleteUser" value="#{msg['common.delete']}"
+							showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="resetPassword"
+							value="#{msg['common.resetPassword']}" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+
+					<f:facet name="footer">
+						<h:outputFormat value="#{msg['searchgrid.footertext']}">
+							<f:param value="#{fn:length(userManagedBean.searchedList)}"></f:param>
+						</h:outputFormat>
+					</f:facet>
+				</c:if>
+			</p:dataTable>
+
+		</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="explode"
+			id="confirmDialog"
+			message="#{msg['enitySearch.search.dialog.askconfirm']}"
+			header="#{msg['enitySearch.search.dialog.delete']}"
+			widgetVar="confirmation">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+
+		<p:dialog id="editUserDialog"
+			header="#{userManagedBean.userAddVO.userId==null ? msg['enityAdd.add.save'] : msg['enityAdd.add.update']}"
+			widgetVar="editUserDlg">
+			<p:ajax event="close" update="@(#userSearch)"
+				listener="#{userManagedBean.resetUser}" />
+			<ui:include src="userAdd.xhtml"></ui:include>
+		</p:dialog>
+
+
+	</ui:define>
+
+
+
+
+
+</ui:composition>

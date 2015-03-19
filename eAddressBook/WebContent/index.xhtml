@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/templates/template.xhtml">
+
+
+	<ui:define name="content">
+		<c:if test="#{searchManagedBean.governarateVO.id!=null}">
+			<ui:include src="/pages/person/personSearch.xhtml"></ui:include>
+		</c:if>
+	</ui:define>
+
+
+</ui:composition>
+
+

@@ -1,0 +1,325 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<script type="text/javascript">
+	
+	
+		function handleComplete(xhr, status, args) {
+			if (!args.validationFailed) {
+				<c:if test="${entityManagedBean.entityAddVO.entityCode == null}">
+					document.getElementById('entityAddForm:saveBtn').click();
+				</c:if>
+				<c:if test="${entityManagedBean.entityAddVO.entityCode != null}">
+					document.getElementById('entityAddForm:updateBtn').click();
+				</c:if>
+
+			}
+		}
+		
+		function convertFromENToNL(id, e) {
+			var compId = "tabView:entityAddForm:" + id;
+
+			var directTelEN = document.getElementById(compId).value;
+
+			document.getElementById(compId + "_nl").value = arNum(directTelEN,'arb');
+
+		}
+
+		function convertFromNLToEN(id, e) {
+			var compId = "tabView:entityAddForm:" + id;
+
+			var directTelNL = document.getElementById(compId).value;
+
+			document.getElementById(compId.replace('_nl', '')).value = arNum(directTelNL, 'engl');
+
+		}
+
+		
+
+	</script>
+	<ui:define name="content">
+
+
+
+
+
+		<h:form id="entityAddForm">
+
+
+			<p:panel
+				style="background-color:#E4EEFC;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:outputLabel
+					style="font-size: 12px;height: 22px;font-weight:bold;"
+					value="#{msg['menu.createOU']}"></p:outputLabel>
+			</p:panel>
+
+
+			<h:panelGroup id="messages"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+			<p:tooltip for="inst_cmb" value="Kindly choose an institute"
+				style="display:none" showEffect="fade" hideEffect="fade" />
+
+
+
+
+
+			<p:panelGrid id="addGrid" columns="4" style="width:100%;">
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.governrate']}"
+					style="font-weight:bold;float:#{languageBean.locale=='ar' ? 'RTL':'LTR' }" />
+
+
+				<p:selectOneMenu id="governrate_cmb" filter="true" required="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityAddVO.governarateVO.id}"
+					effect="fade" style="width:168px;">
+					<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.governrateList}" />
+					</c:if>
+
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.directorate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="directorate_cmb" filter="true" required="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityAddVO.directorateVO.id}"
+					effect="fade" style="width:168px;">
+					<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.directorateList}" />
+					</c:if>
+
+				</p:selectOneMenu>
+
+
+
+
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.department']}"
+					style="font-weight:bold" />
+
+
+				<p:selectOneMenu id="deptt_cmb" filter="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityAddVO.departmentVO.id}"
+					effect="fade" style="width:168px">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="-1" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.departmentList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.departmentListNLS}" />
+					</c:if>
+
+
+
+					<p:ajax process="deptt_cmb" partialSubmit="true"
+						event="valueChange" update="section_cmb"
+						listener="#{referenceDataBean.onChangeDepartmentCombo(entityManagedBean.entityAddVO.departmentVO.id)}" />
+
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.section']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="section_cmb" filter="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityAddVO.sectionVO.id}" effect="fade"
+					style="width:168px">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="-1" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.sectionList}"></f:selectItems>
+					</c:if>
+
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.sectionListNLS}"></f:selectItems>
+					</c:if>
+
+					<p:ajax process="section_cmb" partialSubmit="true"
+						event="valueChange" update="deptt_cmb"
+						listener="#{referenceDataBean.onChangeSectionCombo(entityManagedBean.entityAddVO.sectionVO.id)}" />
+
+
+				</p:selectOneMenu>
+
+
+
+
+
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.institute']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="inst_cmb" filter="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityAddVO.institutionVO.instCode}"
+					effect="fade" style="width:168px">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+
+						<f:selectItems value="#{referenceDataBean.instituteList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+
+						<f:selectItems value="#{referenceDataBean.instituteListNLS}" />
+					</c:if>
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel for="txtPostalAddress"
+					value="#{msg['personAdd.add.postaladdress']}"
+					style="font-weight:bold" />
+				<p:inputTextarea id="txtPostalAddress" rows="3" cols="27" dir="ltr"
+					onkeypress="return HasEnglishCharacters(event);" autoResize="false"
+					value="#{entityManagedBean.entityAddVO.postalAddress}" />
+
+
+
+				<h:outputLabel for="txtPostalAddressnls"
+					value="#{msg['personAdd.add.postaladdressbls']}"
+					style="font-weight:bold" />
+				<p:inputTextarea id="txtPostalAddressnls" rows="3" cols="27"
+					dir="rtl" onkeypress="return HasArabicCharacters(event);"
+					autoResize="false"
+					value="#{entityManagedBean.entityAddVO.postalAddressNLS}" />
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.directtelno']}"
+					style="font-weight:bold" />
+				<p:inputMask label="Direct Tel No:" style="width:160px"
+					maxlength="8" mask="99999999" required="true"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					validatorMessage="#{msg['enityAdd.validatelength.directtelno']}"
+					id="direct_txt"
+					value="#{entityManagedBean.entityAddVO.directTelNo}">
+				</p:inputMask>
+
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.fax']}"
+					style="font-weight:bold" />
+				<p:inputMask label="FaxNo" maxlength="8" required="true"
+					mask="99999999" requiredMessage="#{msg['enityAdd.valuerequired']}"
+					validatorMessage="#{msg['enityAdd.validatelength.fax']}"
+					value="#{entityManagedBean.entityAddVO.faxNo}" style="width:160px"
+					id="fax_txt">
+				</p:inputMask>
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.ext']}"
+					style="font-weight:bold" />
+				<p:inputMask label="Extn" style="width:160px" id="ext_txt"
+					mask="9999" required="true" maxlength="4"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					validatorMessage="#{msg['enityAdd.validatelength.ext']}"
+					value="#{entityManagedBean.entityAddVO.extn}">
+				</p:inputMask>
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.email']}"
+					style="font-weight:bold" />
+				<p:inputText label="Email-ID" maxlength="50" dir="LTR"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					validatorMessage="#{msg['enityAdd.validateformate']}"
+					value="#{entityManagedBean.entityAddVO.emailID}"
+					style="width:160px" id="email_txt">
+					<f:validateRegex
+						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+				</p:inputText>
+
+
+				<h:outputText value="#{msg['enityAdd.searchable']}"
+					style="font-weight:bold;" />
+				<p:selectBooleanCheckbox
+					value="#{entityManagedBean.entityAddVO.searchAbleBooleanCustom}" />
+
+
+
+				<h:outputText value="#{msg['enityAdd.emergency']}"
+					style="font-weight:bold" />
+				<p:selectBooleanCheckbox
+					value="#{entityManagedBean.entityAddVO.emergencyBoolean}" />
+
+
+
+
+			</p:panelGrid>
+
+
+
+
+			<div class="searchBtnGrid">
+				<h:panelGrid columns="2" id="btnGrid">
+
+					<c:if test="${entityManagedBean.entityAddVO.entityCode == null}">
+						<p:commandButton value="#{msg['enityAdd.add.save']}" 
+							icon="ui-icon-plus" update="entityAddForm:addGrid,messages"
+							process="@this,addGrid" action="#{entityManagedBean.saveEntity}" />
+
+					</c:if>
+					<c:if test="${entityManagedBean.entityAddVO.entityCode != null}">
+						<p:commandButton value="#{msg['enityAdd.add.update']}"
+							icon="ui-icon-pencil" update="entityAddForm:addGrid,messages"
+							process="@this,addGrid"
+							action="#{entityManagedBean.updateEntity}" />
+					</c:if>
+
+					<p:commandButton value="#{msg['enityAdd.add.reset']}"
+						icon="ui-icon-refresh" update="entityAddForm:addGrid,messages"
+						process="@this" actionListener="#{entityManagedBean.resetEntity}"
+						style="align:left">
+						<p:resetInput target="entityAddForm:addGrid,messages" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</div>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

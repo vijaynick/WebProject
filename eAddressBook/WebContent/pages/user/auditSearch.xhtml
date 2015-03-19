@@ -1,0 +1,177 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="content">
+	<script>
+		$( document ).ready(function() {
+			//alert('welcoem');
+			document.getElementById('auditSearch:load_btn').click();
+		});
+	
+	</script>
+		<h:form id="auditSearch" onkeypress="if (event.keyCode == 13) { document.getElementById('auditSearch:btnSearch').click(); return false; }" >
+
+			<p:commandButton style="display:none" id="load_btn" action="#{userManagedBean.loadAuditRefData}" update=":auditSearch"> </p:commandButton>
+
+			<ui:include src="../../templates/menu.xhtml"></ui:include>
+
+
+			<p:panel
+				style="background-color:#E4EEFC;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:outputLabel
+					style="font-size: 12px;height: 22px;font-weight:bold;"
+					value="#{msg['menu.searchandupdateuser']}"></p:outputLabel>
+			</p:panel>
+
+
+			<h:panelGroup id="messages_delete"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+			<p:panelGrid id="searchPG" columns="4" style="width:100%;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+
+				
+				<h:outputLabel for="category_cmb" style="font-weight:bold"
+				value="#{msg['enitySearch.search.category']}" />
+				<p:selectOneMenu id="category_cmb" filter="true"
+					filterMatchMode="contains"
+					value="#{userManagedBean.auditVO.category}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.categoryList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.categoryList}" />
+					</c:if>
+				</p:selectOneMenu>
+
+           <h:outputLabel for="users_cmb" style="font-weight:bold"
+				value="#{msg['userAdd.add.username']}" />
+				<p:selectOneMenu id="users_cmb" filter="true"
+					filterMatchMode="contains"
+					value="#{userManagedBean.auditVO.userVO.userId}" effect="fade"
+					style="width:168px">
+
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.usersList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.usersList}" />
+					</c:if>
+				</p:selectOneMenu>
+				
+				<h:outputLabel for="action" value="#{msg['personSearch.search.action']}"
+					style="font-weight:bold" />
+				<p:inputText id="action"
+					value="#{userManagedBean.auditVO.action}"
+					style="width:200px" />
+			
+
+
+
+			</p:panelGrid>
+
+			<p:panel
+				style="border-style:none;width:82.5%;direction:#{languageBean.locale=='ar' ? 'LTR':'RTL' }">
+				<table>
+					<tr>
+
+						<td><p:commandButton id="btnSearch"
+								value="#{msg['userSearch.search.search']}" icon="ui-icon-search"
+								process="@this,searchPG" update="searchGrid"
+								actionListener="#{userManagedBean.searchAudit}"
+								style="margin:0;align:right;width:100%" /></td>
+
+						<td><p:commandButton
+								value="#{msg['userSearch.search.reset']}" icon="ui-icon-refresh"
+								process="@this,searchPG"
+								update="searchPG,searchGrid,messages_delete"
+								actionListener="#{userManagedBean.resetAuditSearchForm}"
+								style="margin:0;align:right;width:100%" /></td>
+					</tr>
+				</table>
+
+
+			</p:panel>
+
+
+
+
+			<p:dataTable emptyMessage="#{msg['no.record.found']}"   id="searchGrid" var="auditVO" paginatorPosition="bottom"
+			style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }"
+				value="#{userManagedBean.searchedAuditList}"
+				paginator="#{fn:length(userManagedBean.searchedAuditList)>8}" rows="8"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="2,4,10">
+				<c:if test="${!empty userManagedBean.searchedAuditList}">
+					
+					<p:column headerText="#{msg['personSearch.search.action']}"
+						width="200" styleClass="wrap" sortBy="#{auditVO.action}">
+						<h:outputText value="#{auditVO.action}" />
+					</p:column>
+					
+					
+					<p:column headerText="#{msg['login']}"
+						sortBy="#{auditVO.userVO.loginId}">
+						<h:outputText value="#{auditVO.userVO.loginId}" />
+					</p:column>
+
+					<p:column headerText="#{msg['userSearch.search.username']}"
+						sortBy="#{auditVO.userVO.userName}">
+						<h:outputText value="#{auditVO.userVO.userName}" />
+					</p:column>
+					
+					<p:column headerText="#{msg['search.audit.logtime']}"
+						sortBy="#{auditVO.logTime}">
+						<h:outputText value="#{auditVO.logTime}" >
+<!-- 						 <f:convertDateTime pattern="EEEE, MMMM d yyyy hh:mm aa" /> -->
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="IP Address"
+						sortBy="">
+						<h:outputText value="#{auditVO.clientAddress}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<h:outputFormat value="#{msg['searchgrid.footertext']}">
+							<f:param value="#{fn:length(userManagedBean.searchedAuditList)}"></f:param>
+						</h:outputFormat>
+					</f:facet>
+				</c:if>
+			</p:dataTable>
+
+		</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="explode"
+			id="confirmDialog"
+			message="#{msg['enitySearch.search.dialog.askconfirm']}"
+			header="#{msg['enitySearch.search.dialog.delete']}"
+			widgetVar="confirmation">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+
+		
+
+	</ui:define>
+
+
+
+
+
+</ui:composition>

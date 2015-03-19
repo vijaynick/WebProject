@@ -1,0 +1,201 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+
+	<ui:define name="content">
+		<h:form id="pos_center_layout_">
+
+
+
+			<table>
+				<tr>
+					<td valign="top" height="100%" width="80"></td>
+					<td valign="baseline" width="100%" align="center" height="100%">
+
+						<table id="login_outer" border="0" cellpadding="0" cellspacing="0"
+							width="450" style="padding-left: 20px">
+							<tbody>
+								<tr>
+
+									<c:if test="${languageBean.locale=='en'}">
+										<th align="left"><h:outputText
+												value="#{msg['login.eablogin']}"></h:outputText></th>
+									</c:if>
+
+									<c:if test="${languageBean.locale=='ar'}">
+										<th align="right"><h:outputText
+												value="#{msg['login.eablogin']}"></h:outputText></th>
+									</c:if>
+
+
+
+								</tr>
+								<tr>
+									<td align="left" class="title2"
+										style="color: red; padding-left: 10px;" width="100%"></td>
+								</tr>
+								<tr>
+									<td>
+										<table id="loginpanel" border="0" cellpadding="0"
+											cellspacing="0" width="376">
+
+											<tbody>
+												<tr>
+													<td width="376">
+
+														<table id="login" border="0" cellpadding="0"
+															cellspacing="0" width="391">
+															<tbody>
+																<tr>
+																	<th
+																		align="#{languageBean.locale=='ar' ? 'right':'left'}"
+																		colspan="2"><h:panelGroup id="messages"
+																			style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+																			<p:messages autoUpdate="true" closable="true" />
+
+																		</h:panelGroup></th>
+
+
+																</tr>
+
+																<c:if test="${languageBean.locale=='ar'}">
+																	<!--  -->
+																	<tr>
+																		<td class="captn" align="right" width="133"><h:inputText
+																				dir="RTL" id="j_username" class="field"
+																				value="#{loginManagedBean.currentUser.loginId}"
+																				required="true"
+																				requiredMessage="#{msg['login.usernamerequired']}" /></td>
+
+
+																		<td align="center"><h:outputLabel
+																				for="j_username"
+																				value="#{msg['userAdd.add.username']}" /></td>
+																		<p:focus for="j_username" />
+
+																	</tr>
+
+
+
+																	<tr>
+																		<td class="captn" align="right"><h:inputSecret
+																				dir="RTL" id="j_password" class="field"
+																				value="#{loginManagedBean.currentUser.password}"
+																				required="true"
+																				requiredMessage="#{msg['login.passwordrequired']}" /></td>
+																		<td align="center"><h:outputLabel
+																				for="j_password"
+																				value="#{msg['userAdd.add.password']}" /></td>
+
+																	</tr>
+
+																</c:if>
+
+
+																<c:if test="${languageBean.locale=='en'}">
+
+																	<tr>
+																		<td class="captn" align="left" width="133"><h:outputLabel
+																				for="j_username"
+																				value="#{msg['userAdd.add.username']}" /></td>
+
+																		<p:focus for="j_username" />
+																		<td align="left"><h:inputText id="j_username"
+																				class="field"
+																				value="#{loginManagedBean.currentUser.loginId}"
+																				required="true"
+																				requiredMessage="#{msg['login.usernamerequired']}" /></td>
+
+																	</tr>
+																	<tr>
+																		<td class="captn" align="left"><h:outputLabel
+																				for="j_password"
+																				value="#{msg['userAdd.add.password']}" /></td>
+																		<td align="left"><h:inputSecret id="j_password"
+																				class="field"
+																				value="#{loginManagedBean.currentUser.password}"
+																				required="true"
+																				requiredMessage="#{msg['login.passwordrequired']}" /></td>
+
+																	</tr>
+																</c:if>
+
+
+																<c:if test="${languageBean.locale=='en'}">
+
+																	<tr>
+																		<td height="40">&#160;</td>
+
+																		<td align="right" style="padding-right: 47px;"><h:panelGrid
+																				columns="2">
+
+																				<p:selectOneRadio id="options"
+																					value="#{languageBean.language}">
+																					<f:selectItem itemValue="en"
+																						itemLabel="#{msg['lanugage.select.en']}" />
+																					<f:selectItem itemValue="ar"
+																						itemLabel="#{msg['lanugage.select.ar']}" />
+																					<p:ajax event="change"
+																						update="@(#login_panel_template)" process="@this" />
+																				</p:selectOneRadio>
+
+																				<h:commandButton id="submitButton"
+																					value="#{msg['login']}" class="btn"
+																					action="#{loginManagedBean.login}" />
+																			</h:panelGrid></td>
+
+																	</tr>
+																</c:if>
+
+																<c:if test="${languageBean.locale=='ar'}">
+
+
+
+																	<tr>
+																		<td align="right" style="padding-right: 47px;"><h:panelGrid
+																				columns="2">
+
+																				<p:selectOneRadio id="options"
+																					value="#{languageBean.language}">
+																					<f:selectItem itemValue="en"
+																						itemLabel="#{msg['lanugage.select.en']}" />
+																					<f:selectItem itemValue="ar"
+																						itemLabel="#{msg['lanugage.select.ar']}" />
+																					<p:ajax event="change"
+																						update="@(#login_panel_template)" process="@this" />
+																				</p:selectOneRadio>
+
+																				<h:commandButton id="submitButton"
+																					value="#{msg['login']}" class="btn"
+																					action="#{loginManagedBean.login}" />
+																			</h:panelGrid></td>
+
+
+																	</tr>
+
+																</c:if>
+
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</h:form>
+	</ui:define>
+</ui:composition>

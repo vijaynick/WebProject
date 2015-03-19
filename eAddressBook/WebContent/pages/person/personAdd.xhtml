@@ -1,0 +1,398 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+	<h:form id="personAddForm">
+		<h:panelGroup style="color:pink" id="outer_panel">
+			<p:focus />
+			<h:panelGroup id="messages"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+			<p:panel>
+				<p:panelGrid id="addGrid" columns="4" styleClass="companyHeader"
+					style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+
+
+
+					<p:outputLabel value="#{msg['enityAdd.add.governrate']}"
+						for="governrate_cmb" style="font-weight:bold" />
+					<p:selectOneMenu id="governrate_cmb" filter="true" required="true"
+						rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+						tabindex="1" filterMatchMode="contains"
+						requiredMessage="#{msg['enityAdd.valuerequired']}"
+						value="#{personManagedBean.personAddVO.entityVO.governarateVO.id}"
+						effect="fade" style="width:150px">
+						<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+							<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+								itemValue="-1" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.governrateList}" />
+						</c:if>
+
+						<p:ajax process="governrate_cmb" partialSubmit="true"
+							event="valueChange"
+							update="directorate_cmb,deptt_cmb,section_cmb,institute"
+							listener="#{personManagedBean.onChangeOfGovCombo(personManagedBean.personAddVO.entityVO.governarateVO.id)}" />
+					</p:selectOneMenu>
+					<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==2}">
+						<c:if test="#{languageBean.locale=='en'}">
+							<h:outputText value="#{searchManagedBean.governarateVO.govName}"
+								style="font-weight:bold"></h:outputText>
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<h:outputText
+								value="#{searchManagedBean.governarateVO.govNameNLS}"
+								style="font-weight:bold"></h:outputText>
+						</c:if>
+					</c:if>
+
+
+
+					<p:outputLabel for="directorate_cmb" style="font-weight:bold"
+						value="#{msg['enitySearch.search.directorate']}" />
+
+					<p:selectOneMenu id="directorate_cmb" filter="true" required="true"
+						rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+						tabindex="2" filterMatchMode="contains"
+						value="#{personManagedBean.personAddVO.entityVO.directorateVO.id}"
+						effect="fade" style="width:150px;!important">
+
+						<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+							<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+								itemValue="-1" />
+						</c:if>
+
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.directorateList}" />
+						</c:if>
+
+
+						<!-- 						<p:ajax process="directorate_cmb" partialSubmit="true" -->
+						<!-- 							event="valueChange" -->
+						<!-- 							update="@this,deptt_cmb,section_cmb,directorate_cmb" -->
+						<!-- 							listener="#{personManagedBean.onChangeOfDirCombo(personManagedBean.personAddVO.entityVO.directorateVO.id)}" /> -->
+
+					</p:selectOneMenu>
+					<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==2}">
+						<c:if test="#{languageBean.locale=='en'}">
+							<h:outputText
+								value="  #{searchManagedBean.directorateVO.direcotrateName}"
+								style="font-weight:bold"></h:outputText>
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<h:outputText
+								value="  #{searchManagedBean.directorateVO.direcotrateNameNLS}"
+								style="font-weight:bold"></h:outputText>
+						</c:if>
+
+					</c:if>
+
+
+
+
+					<h:outputLabel for="deptt_cmb" style="font-weight:bold"
+						value="#{msg['enitySearch.search.department']}" />
+					<p:selectOneMenu id="deptt_cmb" filter="true" tabindex="3"
+						filterMatchMode="contains"
+						value="#{personManagedBean.personAddVO.entityVO.departmentVO.id}"
+						effect="fade" style="width:150px;">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="-1" />
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.departmentList}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.departmentListNLS}" />
+						</c:if>
+
+						<p:ajax process="deptt_cmb" partialSubmit="true"
+							event="valueChange" update="section_cmb,@this"
+							listener="#{personManagedBean.onChangeDepartmentCombo(personManagedBean.personAddVO.entityVO.departmentVO.id)}" />
+
+					</p:selectOneMenu>
+
+					<h:outputLabel for="section_cmb" style="font-weight:bold"
+						value="#{msg['enitySearch.search.section']}" />
+					<p:selectOneMenu id="section_cmb" filter="true" dir="RTL"
+						tabindex="4" filterMatchMode="contains"
+						value="#{personManagedBean.personAddVO.entityVO.sectionVO.id}"
+						effect="fade" style="width:150px">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="-1" />
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.sectionList}"></f:selectItems>
+						</c:if>
+
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.sectionListNLS}"></f:selectItems>
+						</c:if>
+						<!-- 						<p:ajax process="section_cmb" partialSubmit="true" -->
+						<!-- 							event="valueChange" update="deptt_cmb,@this" -->
+						<!-- 							listener="#{personManagedBean.onChangeSectionCombo(personManagedBean.personAddVO.entityVO.sectionVO.id)}" /> -->
+
+
+					</p:selectOneMenu>
+
+
+
+					<h:outputLabel for="institute" style="font-weight:bold"
+						value="#{msg['enitySearch.search.institute']}" />
+					<p:selectOneMenu id="institute" filter="true" tabindex="5"
+						filterMatchMode="contains"
+						value="#{personManagedBean.personAddVO.entityVO.institutionVO.instCode}"
+						effect="fade" style="width:150px">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="" />
+						<c:if test="#{languageBean.locale=='en'}">
+
+							<f:selectItems value="#{referenceDataBean.instituteList}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+
+							<f:selectItems value="#{referenceDataBean.instituteListNLS}" />
+						</c:if>
+
+					</p:selectOneMenu>
+
+
+					<h:outputLabel for="staffNoToAdd"
+						value="#{msg['personAdd.add.staffno']} " style="font-weight:bold" />
+
+					<p:inputText id="staffNoToAdd" maxlength="10"
+						value="#{personManagedBean.personAddVO.staffNo}"
+						style="width:200px" tabindex="6" />
+
+
+					<c:if test="#{languageBean.locale=='en'}">
+						<p:outputLabel for="nameAdd" value="#{msg['personAdd.add.name']}"
+							style="font-weight:bold" />
+						<p:inputText id="nameAdd" style="width:200px" required="true"
+							dir="ltr" onkeypress="return HasEnglishCharacters(event);"
+							requiredMessage="#{msg['enityAdd.valuerequired']}"
+							title="#{component.valid ? '' : msg['personAdd.required.name']}"
+							tabindex="7" value="#{personManagedBean.personAddVO.personName}"
+							onfocus="true" maxlength="2000">
+						</p:inputText>
+
+						<p:outputLabel value="#{msg['personAdd.add.personnamenls']}"
+							for="nameAddNLS" style="font-weight:bold" />
+						<p:inputText id="nameAddNLS" style="width:200px;" required="true"
+							requiredMessage="#{msg['enityAdd.valuerequired']}"
+							onkeypress="return HasArabicCharacters(event);"
+							value="#{personManagedBean.personAddVO.personNameNLS}" dir="rtl"
+							tabindex="8" maxlength="2000">
+						</p:inputText>
+
+					</c:if>
+
+					<c:if test="#{languageBean.locale=='ar'}">
+
+						<p:outputLabel value="#{msg['personAdd.add.personnamenls']}"
+							for="nameAddNLS" style="font-weight:bold" />
+						<p:inputText id="nameAddNLS" style="width:200px;" required="true"
+							requiredMessage="#{msg['enityAdd.valuerequired']}"
+							onkeypress="return HasArabicCharacters(event);"
+							value="#{personManagedBean.personAddVO.personNameNLS}" dir="rtl"
+							tabindex="7" maxlength="2000">
+						</p:inputText>
+
+						<h:outputLabel for="nameAdd" value="#{msg['personAdd.add.name']}"
+							style="font-weight:bold" />
+						<p:inputText id="nameAdd" style="width:200px" required="true"
+							dir="ltr" onkeypress="return HasEnglishCharacters(event);"
+							requiredMessage="#{msg['enityAdd.valuerequired']}"
+							title="#{component.valid ? '' : msg['personAdd.required.name']}"
+							tabindex="8" value="#{personManagedBean.personAddVO.personName}"
+							onfocus="true" maxlength="2000">
+						</p:inputText>
+
+					</c:if>
+
+
+
+
+					<p:outputLabel for="desigAdd"
+						value="#{msg['personAdd.add.designation']}"
+						style="font-weight:bold" />
+					<p:selectOneMenu id="desigAdd" tabindex="9"
+						requiredMessage="#{msg['enityAdd.valuerequired']}"
+						title="#{component.valid ? '' : msg['personAdd.required.desig']}"
+						value="#{personManagedBean.personAddVO.designationVO.id}"
+						style="width:200px" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="" />
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.designations}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.designationsNLS}" />
+						</c:if>
+					</p:selectOneMenu>
+
+
+					<c:if test="#{languageBean.locale=='en'}">
+						<h:outputLabel for="postalAddress"
+							value="#{msg['personAdd.add.postaladdress']}"
+							style="font-weight:bold" />
+						<p:inputTextarea id="postalAddress" rows="3" cols="40"
+							tabindex="10" style="width:200px"
+							onkeypress="return HasEnglishCharacters(event);"
+							autoResize="false"
+							value="#{personManagedBean.personAddVO.postalAddress}" />
+					</c:if>
+
+					<c:if test="#{languageBean.locale=='ar'}">
+						<h:outputLabel for="postalAddressnls"
+							value="#{msg['personAdd.add.postaladdressbls']}"
+							style="font-weight:bold" />
+						<p:inputTextarea id="postalAddressnls" rows="3" cols="27"
+							tabindex="10" dir="RTL"
+							onkeypress="return HasArabicCharacters(event);"
+							autoResize="false"
+							value="#{personManagedBean.personAddVO.postalAddressNLS}" />
+
+					</c:if>
+
+					<p:outputLabel value="#{msg['personAdd.add.gsmprimary']}"
+						for="gsmPrimaryToAdd" style="font-weight:bold" />
+					<h:panelGroup>
+						<p:inputMask id="gsmPrimaryToAdd" style="width:88px"
+							mask="99999999"
+							requiredMessage="#{msg['enityAdd.valuerequired']}"
+							title="#{component.valid ? '' : msg['personAdd.required.gsmprimary']}"
+							value="#{personManagedBean.personAddVO.gsmPrimary}" tabindex="11" />
+
+						<p:selectBooleanCheckbox
+							value="#{personManagedBean.personAddVO.searchAbleBooleanCust}" />
+						<h:inputHidden></h:inputHidden>
+
+						<p:spacer width="10" height="0" />
+
+						<h:outputText value="#{msg['enityAdd.searchable']}"
+							style="font-weight:bold;" />
+						<p:spacer width="5" height="0" />
+					</h:panelGroup>
+
+					<h:outputLabel value="#{msg['personAdd.add.gsmaddnl']}"
+						style="font-weight:bold" />
+					<p:inputMask id="gsmAddnlToAdd" mask="99999999"
+						value="#{personManagedBean.personAddVO.gsmAddnl}"
+						style="width:200px" tabindex="12" />
+
+					<h:outputLabel value="#{msg['personAdd.add.directtel']}"
+						style="font-weight:bold" />
+					<p:inputMask id="directTelToAdd" mask="99999999" tabindex="13"
+						value="#{personManagedBean.personAddVO.directTelNo}"
+						style="width:200px" />
+
+					<h:outputLabel value="#{msg['enitySearch.search.fax']}"
+						style="font-weight:bold" />
+					<p:inputMask id="fax" mask="99999999" tabindex="13"
+						value="#{personManagedBean.personAddVO.fax}" style="width:200px" />
+
+
+
+					<p:outputLabel value="#{msg['personAdd.add.ext']}" for="extnToAdd"
+						style="font-weight:bold" />
+					<p:inputMask id="extnToAdd" required="true" tabindex="14"
+						requiredMessage="#{msg['enityAdd.valuerequired']}"
+						value="#{personManagedBean.personAddVO.extn}" style="width:200px" />
+
+
+					<p:outputLabel value="#{msg['personAdd.add.ext2']}"
+						for="extnToAdd2" style="font-weight:bold" />
+					<p:inputMask id="extnToAdd2" mask="9999" tabindex="14"
+						requiredMessage="#{msg['enityAdd.valuerequired']}"
+						value="#{personManagedBean.personAddVO.extn2}" style="width:200px" />
+
+
+					<h:outputLabel value="#{msg['personAdd.add.residencetel']}"
+						style="font-weight:bold" />
+					<p:inputMask id="resiTelToAdd" mask="99999999" tabindex="15"
+						value="#{personManagedBean.personAddVO.resiTelNo}"
+						style="width:200px" />
+
+
+
+
+
+					<h:outputLabel value="#{msg['personAdd.add.email']}"
+						style="font-weight:bold" />
+
+					<p:inputText id="emailToAdd" dir="LTR"
+						title="#{component.valid ? '' : msg['personAdd.invalid.email']}"
+						validatorMessage="#{msg['personAdd.invalid.email']}"
+						value="#{personManagedBean.personAddVO.email}" style="width:200px"
+						maxlength="50" tabindex="16">
+						<f:validateRegex
+							pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+					</p:inputText>
+
+
+
+
+
+
+
+				</p:panelGrid>
+			</p:panel>
+
+			<p:panelGrid columns="6" styleClass="searchable" id="boolean_PG">
+
+				<h:outputText value="#{msg['enityAdd.important']}"
+					style="font-weight:bold" />
+				<p:selectBooleanCheckbox
+					value="#{personManagedBean.personAddVO.importantBoolean}" />
+				<h:inputHidden></h:inputHidden>
+			</p:panelGrid>
+
+
+
+			<p:tooltip global="true" position="left center"
+				targetPosition="right center" forSelector=".ui-state-error" />
+
+			<div style="padding-left: 160px">
+				<h:panelGrid columns="2" id="btnGrid">
+
+					<p:commandButton
+						value="#{personManagedBean.personAddVO.personCode==null ? msg['enityAdd.add.save'] : msg['enityAdd.add.update']}"
+						icon="ui-icon-plus" id="btnSave" styleClass="ui-priority-primary"
+						update="messages,addGrid,boolean_PG"
+						process="@this,addGrid,boolean_PG"
+						action="#{personManagedBean.savePerson}"
+						style="margin:0;align:right" />
+
+
+
+					<p:commandButton colspan="4" value="#{msg['enityAdd.add.reset']}"
+						rendered="#{personManagedBean.personAddVO.personCode==null}"
+						process="@this" styleClass="ui-priority-primary"
+						update="messages,addGrid,boolean_PG"
+						actionListener="#{personManagedBean.resetPerson}"
+						style="margin:0;align:right" icon="ui-icon-refresh">
+						<p:resetInput target="addGrid,boolean_PG,messages" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</div>
+		</h:panelGroup>
+
+	</h:form>
+
+</ui:composition>

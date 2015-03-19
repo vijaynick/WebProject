@@ -1,0 +1,385 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+	<script type="text/javascript">
+		function rowMinimize() {
+			var i = $('.ui-row-toggler.ui-icon-circle-triangle-s').length;
+			if (i == 1) {
+				return;
+			}
+			$('.ui-row-toggler.ui-icon-circle-triangle-s').trigger('click');
+		}
+	</script>
+
+	<ui:define name="content">
+
+		<h:form id="tab1form">
+
+			<p:panel
+				style="background-color:#E4EEFC;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:outputLabel
+					style="font-size: 12px;height: 22px;font-weight:bold;"
+					value="#{msg['menu.searchandupdateou']}"></p:outputLabel>
+			</p:panel>
+
+
+
+
+			<h:panelGroup id="messages_delete"
+				style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+				<p:messages showDetail="true" closable="true" globalOnly="true" />
+			</h:panelGroup>
+
+
+			<p:panelGrid id="searchPG" columns="4"
+				style="width:100%;">
+
+
+
+
+
+				<h:outputLabel value="#{msg['enityAdd.add.governrate']}"
+					style="font-weight:bold" />
+				<p:selectOneMenu id="governratee_cmb" filter="true" required="true"
+					filterMatchMode="contains"
+					requiredMessage="#{msg['enityAdd.valuerequired']}"
+					value="#{entityManagedBean.entityVO.governarateVO.id}"
+					effect="fade" style="width:168px">
+					<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+						<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+							itemValue="-1" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.governrateList}" />
+					</c:if>
+				</p:selectOneMenu>
+
+
+				<h:outputLabel for="directorate" style="font-weight:bold"
+					value="#{msg['enitySearch.search.directorate']}" />
+
+				<p:selectOneMenu id="directorate" filter="true"
+					filterMatchMode="contains"
+					value="#{entityManagedBean.entityVO.directorateVO.id}"
+					effect="fade" style="width:168px;!important">
+					<div style="color: red">
+						<c:if test="#{loginManagedBean.currentUser.roleVO.roleId==1}">
+							<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+								itemValue="-1" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='ar'}">
+							<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+						</c:if>
+						<c:if test="#{languageBean.locale=='en'}">
+							<f:selectItems value="#{referenceDataBean.directorateList}" />
+						</c:if>
+
+
+					</div>
+				</p:selectOneMenu>
+
+
+
+
+				<h:outputLabel for="institute" style="font-weight:bold"
+					value="#{msg['enitySearch.search.institute']}:" />
+				<p:selectOneMenu id="institute" filter="true"
+					filterMatchMode="contains"
+					value="#{entityManagedBean.entityVO.institutionVO.instCode}"
+					effect="fade" style="width:168px">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="-1" />
+
+					<c:if test="#{languageBean.locale=='en'}">
+
+						<f:selectItems value="#{referenceDataBean.instituteList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+
+						<f:selectItems value="#{referenceDataBean.instituteListNLS}" />
+					</c:if>
+
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel for="deptt" style="font-weight:bold"
+					value="#{msg['enitySearch.search.department']}:" />
+				<p:selectOneMenu id="deptt" filter="true" filterMatchMode="contains"
+					value="#{entityManagedBean.entityVO.departmentVO.id}" effect="fade"
+					style="width:168px;">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="-1" />
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.departmentList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.departmentListNLS}" />
+					</c:if>
+
+				</p:selectOneMenu>
+
+
+				<h:outputLabel for="section" style="font-weight:bold"
+					value="#{msg['enitySearch.search.section']}:" />
+				<p:selectOneMenu id="section" filter="true" dir="RTL"
+					filterMatchMode="contains"
+					value="#{entityManagedBean.entityVO.sectionVO.id}" effect="fade"
+					style="width:168px">
+					<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+						itemValue="-1" />
+
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.sectionList}"></f:selectItems>
+					</c:if>
+
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.sectionListNLS}"></f:selectItems>
+					</c:if>
+
+
+				</p:selectOneMenu>
+
+
+
+				<h:outputLabel for="DirectTelNo" style="font-weight:bold"
+					value="#{msg['enitySearch.search.directtelno']}" />
+				<p:inputMask id="DirectTelNo" mask="99999999"
+					value="#{entityManagedBean.entityVO.directTelNo}"
+					style="width:160px" />
+
+				<h:outputLabel for="Extn" value="#{msg['enitySearch.search.ext']}"
+					style="font-weight:bold" />
+				<p:inputMask id="Extn" label="Extn" style="width:160px" mask="9999"
+					value="#{entityManagedBean.entityVO.extn}" />
+
+				<h:outputLabel for="FaxNo" value="#{msg['enitySearch.search.fax']}"
+					style="font-weight:bold" />
+				<p:inputMask id="FaxNo" label="FaxNo" mask="99999999"
+					value="#{entityManagedBean.entityVO.faxNo}" style="width:160px" />
+
+				<h:outputLabel for="Email-ID" style="font-weight:bold"
+					value="#{msg['enitySearch.search.email']}" />
+				<p:inputText id="Email-ID" label="Email-ID"
+					value="#{entityManagedBean.entityVO.emailID}" style="width:160px" />
+
+			</p:panelGrid>
+
+			<div class="searchBtnGrid">
+
+				<table>
+					<tr>
+						<td><p:commandButton
+								value="#{msg['enitySearch.search.search']}"
+								icon="ui-icon-search" process="@this,searchPG"
+								update="searchGrid"
+								actionListener="#{entityManagedBean.getConfigDataModel}"
+								style="margin:0;align:right;width:100%" /></td>
+
+						<td><p:commandButton
+								value="#{msg['enitySearch.search.reset']}"
+								icon="ui-icon-refresh" process="@this,searchPG"
+								update="searchPG,searchGrid,messages_delete"
+								actionListener="#{entityManagedBean.resetSearchForm}"
+								style="margin:0;align:right;width:100%" /></td>
+					</tr>
+				</table>
+
+			</div>
+
+
+
+			<p:dataTable emptyMessage="#{msg['no.record.found']}"   id="searchGrid" var="entityVo"  sortMode="multiple"
+				dir="#{languageBean.locale=='ar' ? 'RTL':'LTR' }"
+				paginatorPosition="bottom" lazy="true"
+				value="#{entityManagedBean.configDataModel}" paginator="true"
+				rows="6"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+
+				<p:column style="width:2%">
+					<p:rowToggler />
+				</p:column>
+
+				<p:ajax event="rowToggle" />
+
+
+				<p:column headerText="#{msg['enityAdd.add.governrate']}" width="200"
+					styleClass="wrap">
+					<c:if test="${languageBean.locale=='en'}">
+						<h:outputText value="#{entityVo.governarateVO.govName}" />
+
+					</c:if>
+					<c:if test="${languageBean.locale=='ar'}">
+						<h:outputText value="#{entityVo.governarateVO.govNameNLS}" />
+					</c:if>
+				</p:column>
+
+
+
+
+				<p:column headerText="#{msg['enitySearch.search.section']}"
+					width="200" styleClass="wrap">
+					<c:if test="${languageBean.locale=='en'}">
+						<h:outputText id="directorateToExpand"
+							value="#{entityVo.sectionVO.sectionName}" />
+					</c:if>
+					<c:if test="${languageBean.locale=='ar'}">
+						<h:outputText id="directorateToExpand"
+							value="#{entityVo.sectionVO.sectionNameNLS}" />
+					</c:if>
+				</p:column>
+
+				<p:column headerText="#{msg['enitySearch.search.directtelno']}"
+					sortBy="#{entityVo.directTelNo}">
+					<h:outputText value="#{entityVo.directTelNo}" />
+				</p:column>
+
+
+				<p:column headerText="#{msg['enitySearch.search.ext']}"
+					sortBy="#{entityVo.extn}">
+					<h:outputText value="#{entityVo.extn}" />
+				</p:column>
+
+				<p:column headerText="#{msg['enitySearch.search.fax']}"
+					sortBy="#{entityVo.faxNo}">
+					<h:outputText value="#{entityVo.faxNo}" />
+				</p:column>
+
+
+
+				<c:if test="${loginManagedBean.currentUser.roleVO.roleName!='Normal'}">
+					<p:column headerText="#{msg['enitySearch.search.action']}"
+						width="100" style="align:center">
+						<center>
+							<h:panelGroup>
+								<p:commandButton icon="ui-icon-pencil" id="editEntity"
+									style="margin:0;align:right"
+									actionListener="#{entityManagedBean.editEntity}">
+									<f:param name="entityCode" value="#{entityVo.entityCode}" />
+								</p:commandButton>
+								<h:outputText value="   "></h:outputText>
+								<p:commandButton icon="ui-icon-trash" id="deleteEntity"
+									update=":tab1form"
+									action="#{entityManagedBean.deleteEntity(entityVo.entityCode)}">
+
+								</p:commandButton>
+
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode" id="confirmDialog"
+									message="#{msg['enitySearch.search.dialog.askconfirm']}"
+									header="#{msg['enitySearch.search.dialog.delete']}"
+									widgetVar="confirmation">
+									<p:commandButton value="Yes" type="button"
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+									<p:commandButton value="No" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
+
+
+								<h:outputText value="   "></h:outputText>
+
+								<p:commandButton icon="ui-icon-plus" id="addPerson"
+									oncomplete="prmpt.show();">
+									<f:setPropertyActionListener
+										target="#{personManagedBean.personAddVO.entityVO.entityCode}"
+										value="#{entityVo.entityCode}"></f:setPropertyActionListener>
+								</p:commandButton>
+
+
+
+
+
+
+							</h:panelGroup>
+
+						</center>
+						<p:tooltip for="editEntity" value="#{msg['common.edit']}"
+							showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="deleteEntity" value="#{msg['common.delete']}"
+							showEffect="fade" hideEffect="fade" />
+
+					</p:column>
+				</c:if>
+				<f:facet name="footer">
+					<h:outputFormat value="#{msg['searchgrid.footertext']}">
+						<f:param value="#{entityManagedBean.configDataModel.rowCount}"></f:param>
+					</h:outputFormat>
+				</f:facet>
+
+
+
+				<!-- Row Expansion Starts here -->
+				<p:rowExpansion>
+					<p:panelGrid id="display" columns="4" style="width:100%;"
+						styleClass="ui-datatable table">
+
+
+
+
+						<h:outputLabel for="deptt" style="font-weight:bold"
+							value="#{msg['enitySearch.search.department']}:" />
+						<c:if test="${languageBean.locale=='en'}">
+							<h:outputText id="departmentToExpand"
+								value="#{entityVo.departmentVO.departmentName}" />
+						</c:if>
+						<c:if test="${languageBean.locale=='ar'}">
+							<h:outputText id="departmentToExpand"
+								value="#{entityVo.departmentVO.departmentNameNLS}" />
+						</c:if>
+
+
+
+						<h:outputLabel for="section" style="font-weight:bold"
+							value="#{msg['enitySearch.search.section']}:" />
+						<c:if test="${languageBean.locale=='en'}">
+							<h:outputText id="SectionToExpand"
+								value="#{entityVo.sectionVO.sectionName}" />
+						</c:if>
+						<c:if test="${languageBean.locale=='ar'}">
+							<h:outputText id="SectionToExpand"
+								value="#{entityVo.sectionVO.sectionNameNLS}" />
+						</c:if>
+
+
+						<h:outputLabel for="institute" style="font-weight:bold"
+							value="#{msg['enitySearch.search.institute']}:" />
+						<c:if test="${languageBean.locale=='en'}">
+							<h:outputText value="#{entityVo.institutionVO.instName}" />
+						</c:if>
+						<c:if test="${languageBean.locale=='ar'}">
+							<h:outputText value="#{entityVo.institutionVO.instNameNLS}" />
+						</c:if>
+
+						<h:outputLabel value="#{msg['enitySearch.search.email']}"
+							style="font-weight:bold" />
+						<h:outputText value="#{entityVo.emailID}" />
+
+					</p:panelGrid>
+
+				</p:rowExpansion>
+				<!-- Row Expansion Ends here -->
+
+
+			</p:dataTable>
+		</h:form>
+		<p:dialog id="prompt" header="Add New Person" widgetVar="prmpt"
+			dynamic="true">
+
+			<ui:include src="../../pages/person/personAdd.xhtml"></ui:include>
+
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

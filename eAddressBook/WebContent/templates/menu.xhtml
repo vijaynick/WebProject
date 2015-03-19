@@ -1,0 +1,154 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<script>
+		function selectSidebarLink(link) {
+			jQuery("#menuform").find(".ui-state-active").removeClass(
+					"ui-state-active");
+			if (link) {
+				jQuery(link).addClass("ui-state-active");
+			}
+		}
+	</script>
+
+
+
+	<p:panel
+		style="width:100%;direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }" rendered="#{loginManagedBean.authorized}">
+		<h:panelGrid columns="9">
+			<h:panelGrid columns="1" style="text-align:center">
+				<p:commandLink id="red_home_lnk1"
+					action="#{personManagedBean.redirectToPersonSearch}">
+					<h:graphicImage name="/img/home.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.searchandupdateperson']}"></h:outputText>
+			</h:panelGrid>
+
+			<h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="red_user_search_lnk1"
+					action="#{personManagedBean.redirectToUserSearch}">
+					<h:graphicImage name="/img/user_mgt.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.searchandupdateuser']}"></h:outputText>
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" style="text-align:center">
+				<p:commandLink id="red_dept_search_lnk1"
+					action="#{masterDataManagedBean.redirectToDeptSearch}">
+					<h:graphicImage name="/img/dept.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.searchandupdateDept']}"></h:outputText>
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" style="text-align:center">
+				<p:commandLink id="red_sect_search_lnk1"
+					action="#{masterDataManagedBean.redirectToSectSearch}">
+					<h:graphicImage name="/img/section.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.searchandupdatesect']}"></h:outputText>
+			</h:panelGrid>
+
+            <h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="audit_btn_en1" update="@(#layout)"
+					action="#{userManagedBean.redirectToAuditSearch}">
+					<h:graphicImage name="/img/audit.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.audit']}"></h:outputText>
+			</h:panelGrid>
+            
+            
+			<h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="refersh_cache_btn_en1" update="@(#layout)"
+					action="#{referenceDataBean.resetCache}">
+					<h:graphicImage name="/img/refresh_db.png" />
+				</p:commandLink>
+				<h:outputText value="#{msg['menu.refresh.cache']}"></h:outputText>
+			</h:panelGrid>
+ 
+       <h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="conf_rep_btn_en1" update="@(#layout)"
+					action="#{reportConfigurationBean.redirectToConfigureReport}">
+					<h:graphicImage name="/img/sort_icon_1.png" />
+				</p:commandLink>
+				<h:outputText value="Sort Department"></h:outputText>
+	 </h:panelGrid>
+    
+     <h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="sort_sect_btn" update="@(#layout)"
+					action="#{reportConfigurationBean.redirectToSortSection}">
+					<h:graphicImage name="/img/sort_icon_2.png" />
+				</p:commandLink>
+				<h:outputText value="Sort Section"></h:outputText>
+	 </h:panelGrid>
+	 
+	 <h:panelGrid columns="1"
+				rendered="#{loginManagedBean.currentUser.roleVO.roleId==1}"
+				style="text-align:center">
+				<p:commandLink id="sort_design_btn" update="@(#layout)"
+					action="#{reportConfigurationBean.redirectToSortDesignation}">
+					<h:graphicImage name="/img/sort_icon_2.png" />
+				</p:commandLink>
+				<h:outputText value="Sort Designation"></h:outputText>
+	 </h:panelGrid>
+                 
+            
+		</h:panelGrid>
+	</p:panel>
+	<p:tooltip for="red_home_lnk1"
+		value="#{msg['menu.searchandupdateperson']}" showEffect="slide"
+		hideEffect="slide" />
+	
+	<p:tooltip for="conf_rep_btn_en1"
+		value="Sort Department" showEffect="slide"
+		hideEffect="slide" />
+
+    <p:tooltip for="sort_sect_btn"
+		value="Sort Section" showEffect="slide"
+		hideEffect="slide" />
+    
+
+	<p:tooltip for="refersh_cache_btn_en1"
+		value="#{msg['menu.refresh.cache']}" showEffect="slide"
+		hideEffect="slide" />
+
+	<p:tooltip for="red_user_search_lnk1"
+		value="#{msg['menu.searchandupdateuser']}" showEffect="slide"
+		hideEffect="slide" />
+
+	<p:tooltip for="red_dept_search_lnk1"
+		value="#{msg['menu.searchandupdateDept']}" showEffect="slide"
+		hideEffect="slide" />
+
+	<p:tooltip for="red_sect_search_lnk1"
+		value="#{msg['menu.searchandupdatesect']}" showEffect="slide"
+		hideEffect="slide" />
+
+    <p:tooltip for="audit_btn_en1"
+		value="#{msg['menu.audit']}" showEffect="slide"
+		hideEffect="slide" />
+		
+
+</ui:composition>
+
+
+
+
+
+
+
+

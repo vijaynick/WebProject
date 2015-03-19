@@ -1,0 +1,222 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+	<script>
+		function toggleBusyCurser(value) {
+			if (value == 'wait') {
+				$('body').css('cursor', 'progress');
+			}
+
+			if (value == 'default') {
+				$('body').css('cursor', 'default');
+			}
+
+		}
+	</script>
+
+
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+
+			<c:if test="#{languageBean.locale=='en'}">
+				<h:form>
+					<td colspan="2" class="header_top" align="left"><b><h:outputText
+								value="#{msg['header.ministryofhealth']}"></h:outputText></b> <p:ajaxStatus
+							style="width:16px;height:16px;" id="ajaxStatusPanel"
+							onstart="toggleBusyCurser('wait');"
+							oncomplete="toggleBusyCurser('default');">
+							<f:facet name="start">
+								<h:graphicImage name="/img/ajaxloading.gif" style="border:0;" />
+							</f:facet>
+
+							<f:facet name="complete">
+								<h:outputText value="" />
+							</f:facet>
+						</p:ajaxStatus></td>
+
+
+					<td colspan="2" class="header_top" align="right"><b> <c:if
+								test="${loginManagedBean.authorized}">
+								<p:commandLink onclick="PF('changePassDlg').show()">
+									<h:outputText value="#{msg['menu.leftmenu.changepass']}"></h:outputText>
+								</p:commandLink>
+								<p:spacer width="20" height="0" />
+							</c:if> <c:if test="${not loginManagedBean.authorized}">
+
+								<h:outputLink value="${request.contextPath}/login.xhtml">
+									<h:outputText value="#{msg['login']}"></h:outputText>
+								</h:outputLink>
+								
+								<p:spacer width="20" height="0" />
+								
+								<p:commandButton process="@(#btnDisp)" value="Guest User"
+									actionListener="#{searchManagedBean.showModelPanel}"
+									update="@(#dialogform:dialog)" onclick="PF('dlg').show()"></p:commandButton>
+
+							</c:if> <c:if test="${loginManagedBean.authorized}">
+								<h:outputLink
+									value="#{request.contextPath}/j_spring_security_logout">
+									<h:outputText value="#{msg['menu.leftmenu.logout']}"></h:outputText>
+								</h:outputLink>
+							</c:if> <p:spacer width="20" height="0" /> <h:commandLink
+								action="#{languageBean.setLanguage('ar')}" update="@(#layout)">
+								<h:outputText value="#{msg['lanugage.select.ar']}"></h:outputText>
+							</h:commandLink>
+
+					</b></td>
+				</h:form>
+			</c:if>
+
+			<c:if test="#{languageBean.locale=='ar'}">
+				<h:form>
+					<td colspan="2" class="header_top" align="left"><b> <c:if
+								test="${loginManagedBean.authorized}">
+								<p:commandLink onclick="PF('changePassDlg').show()">
+									<h:outputText value="#{msg['menu.leftmenu.changepass']}"></h:outputText>
+								</p:commandLink>
+								<p:spacer width="20" height="0" />
+							</c:if> <c:if test="${not loginManagedBean.authorized}">
+								<h:outputLink value="/eAddressBook/login.xhtml">
+									<h:outputText value="#{msg['login']}"></h:outputText>
+								</h:outputLink>
+
+								<p:spacer width="20" height="0" />
+								<p:commandButton process="@(#btnDisp)" value="Guest User"
+									actionListener="#{searchManagedBean.showModelPanel}"
+									update="@(#dialogform:dialog)" onclick="PF('dlg').show()"></p:commandButton>
+							</c:if> <c:if test="${loginManagedBean.authorized}">
+								<h:outputLink
+									value="#{request.contextPath}/j_spring_security_logout">
+									<h:outputText value="#{msg['menu.leftmenu.logout']}"></h:outputText>
+								</h:outputLink>
+							</c:if> <p:spacer width="20" height="0" /> <h:commandLink
+								action="#{languageBean.setLanguage('en')}" update="@(#layout)">
+								<h:outputText value="#{msg['lanugage.select.en']}"></h:outputText>
+							</h:commandLink>
+
+					</b></td>
+					<td colspan="2" class="header_top" align="right"><b><h:outputText
+								value="#{msg['header.ministryofhealth']}"></h:outputText></b> <p:ajaxStatus
+							style="width:16px;height:16px;" id="ajaxStatusPanel">
+							<f:facet name="start">
+								<h:graphicImage name="/img/ajaxloading.gif" style="border:0;" />
+							</f:facet>
+
+							<f:facet name="complete">
+								<h:outputText value="" />
+							</f:facet>
+						</p:ajaxStatus></td>
+
+				</h:form>
+			</c:if>
+		</tr>
+	</table>
+
+
+
+
+
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+
+
+		<tr>
+
+			<td align="left" valign="top" width="400px"><h:graphicImage
+					width="960" name="/img/top_banner.jpg" style="border:0" /></td>
+
+
+		</tr>
+
+
+
+
+
+
+
+		<tr>
+			<td align="#{languageBean.locale=='ar' ? 'left':'right'}" colspan="4">
+
+				<c:if test="#{loginManagedBean.authorized}">
+					<b> Welcome, <h:outputText
+							value="#{loginManagedBean.currentUser.userName}"></h:outputText></b>
+				</c:if>
+
+
+			</td>
+		</tr>
+
+
+		<tr>
+			<td align="#{languageBean.locale=='ar' ? 'right':'left'}" colspan="4"
+				class="header_top"><h:form id="innerform">
+
+					<h:panelGrid columns="2">
+						<h:panelGroup>
+							<c:if test="#{searchManagedBean.governarateVO.govName != null}">
+
+
+
+								<c:if test="#{languageBean.locale=='en'}">
+									<h:outputText
+										value="#{searchManagedBean.governarateVO.govName}"
+										style="font-weight:bold"></h:outputText>
+								</c:if>
+								<c:if test="#{languageBean.locale=='ar'}">
+									<h:outputText
+										value="#{searchManagedBean.governarateVO.govNameNLS}"
+										style="font-weight:bold"></h:outputText>
+								</c:if>
+
+
+								<p:spacer width="15" height="10" />
+								<b> >> </b>
+								<p:spacer width="15" height="10" />
+
+
+
+								<c:if test="#{languageBean.locale=='en'}">
+									<h:outputText
+										value="  #{searchManagedBean.directorateVO.direcotrateName}"
+										style="font-weight:bold"></h:outputText>
+								</c:if>
+								<c:if test="#{languageBean.locale=='ar'}">
+									<h:outputText
+										value="  #{searchManagedBean.directorateVO.direcotrateNameNLS}"
+										style="font-weight:bold"></h:outputText>
+								</c:if>
+
+
+							</c:if>
+						</h:panelGroup>
+						
+					</h:panelGrid>
+
+
+
+				</h:form></td>
+		</tr>
+	</table>
+
+
+
+	<p:dialog id="passDlg" header="#{msg['menu.leftmenu.changepass']}"
+		widgetVar="changePassDlg" position="top" modal="true"
+		dir="#{languageBean.locale=='en' ? 'LTRL' : 'RTL'}">
+		<ui:include src="../userChangePassword.xhtml"></ui:include>
+	</p:dialog>
+
+
+
+
+
+
+</ui:composition>

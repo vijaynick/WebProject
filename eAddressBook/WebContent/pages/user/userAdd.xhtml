@@ -1,0 +1,199 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<script type="text/javascript">
+	
+		function handleComplete(xhr, status, args) {
+			if (!args.validationFailed) {
+				<c:if test="${userManagedBean.userAddVO.userId == null}">
+				document.getElementById('tabView:userAddForm:saveBtn').click();
+				</c:if>
+				<c:if test="${userManagedBean.userAddVO.userId != null}">
+				document.getElementById('tabView:userAddForm:updateBtn')
+						.click();
+				</c:if>
+
+			}
+		}
+	</script>
+
+	<h:form id="userAddForm">
+
+
+		<h:panelGroup id="messages"
+			style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+			<p:messages showDetail="true" closable="true" globalOnly="true" />
+		</h:panelGroup>
+
+		<p:panelGrid id="addGrid" columns="3" styleClass="companyHeaderGrid"
+			style="direction:#{languageBean.locale=='ar' ? 'RTL':'LTR' }">
+
+			<h:outputLabel value="#{msg['userAdd.add.username']}"
+				style="font-weight:bold" />
+
+
+			<p:inputText required="true" maxlength="50"
+				requiredMessage="#{msg['userAdd.valuerequired']}"
+				validatorMessage="#{msg['userAdd.validatelength.username']}"
+				value="#{userManagedBean.userAddVO.userName}" style="width:160px"
+				id="username_txt">
+			</p:inputText>
+			<p:message id="username_txt_msg" for="username_txt" />
+
+
+
+			<h:outputLabel value="#{msg['userAdd.add.staff']}"
+				style="font-weight:bold" />
+			<p:inputText required="true" maxlength="10"
+				requiredMessage="#{msg['userAdd.valuerequired']}"
+				value="#{userManagedBean.userAddVO.staffno}" style="width:160px"
+				id="staffNo_txt">
+				<p:ajax event="keyup" update="loginid_txt" />
+			</p:inputText>
+			<p:message id="staffNo_txt_msg" for="staffNo_txt" />
+
+
+			<h:outputLabel value="#{msg['userAdd.add.loginid']}"
+				style="font-weight:bold" />
+
+			<p:inputText style="width:160px" required="true" maxlength="20"
+				readonly="true" readOnly="true"
+				requiredMessage="#{msg['userAdd.valuerequired']}"
+				validatorMessage="#{msg['userAdd.validatelength.loginid']}"
+				id="loginid_txt" value="#{userManagedBean.userAddVO.staffno}">
+			</p:inputText>
+			<p:message id="loginid_txt_msg" for="loginid_txt" />
+
+
+			<h:outputLabel value="#{msg['userAdd.add.role']}"
+				style="font-weight:bold" />
+			<h:panelGrid columns="1">
+				<p:selectOneRadio id="user_role" required="true"
+					styleClass="myRadio"
+					requiredMessage="#{msg['userAdd.valuerequired']}"
+					value="#{userManagedBean.userAddVO.roleVO.roleId}"
+					style="align:left;width:0px;border-style: none !important;">
+					<c:if test="#{languageBean.locale=='en'}">
+						<f:selectItems value="#{referenceDataBean.roleList}" />
+					</c:if>
+					<c:if test="#{languageBean.locale=='ar'}">
+						<f:selectItems value="#{referenceDataBean.roleListNLS}" />
+					</c:if>
+
+
+				</p:selectOneRadio>
+			</h:panelGrid>
+			<p:message id="user_role_msg" for="user_role" />
+
+
+			<h:outputLabel value="#{msg['userAdd.add.email']}"
+				style="font-weight:bold" />
+			<p:inputText label="Email-ID" dir="LTR"
+				validatorMessage="#{msg['userAdd.validateformate']}"
+				value="#{userManagedBean.userAddVO.email}" style="width:160px"
+				id="email_txt">
+				<f:validateRegex
+					pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+			</p:inputText>
+			<p:message id="email_txt_msg" for="email_txt" />
+
+
+			<h:outputLabel value="#{msg['userAdd.add.mobile']}"
+				style="font-weight:bold" />
+			<p:inputMask mask="99999999"
+				validatorMessage="#{msg['userAdd.validatelength.mobile']}"
+				value="#{userManagedBean.userAddVO.mobile}" style="width:160px"
+				id="mobile_txt">
+
+			</p:inputMask>
+			<p:message id="mobile_txt_msg" for="mobile_txt" />
+
+
+			<h:outputLabel value="#{msg['userAdd.add.remarks']}"
+				style="font-weight:bold" />
+			<p:inputTextarea rows="3" cols="30" autoResize="false"
+				maxlength="1000" requiredMessage="#{msg['userAdd.valuerequired']}"
+				validatorMessage="#{msg['userAdd.validatelength.remarks']}"
+				value="#{userManagedBean.userAddVO.remarks}" style="width:160px"
+				id="remarks_txt">
+				<f:validateLength minimum="0" maximum="500" />
+			</p:inputTextarea>
+			<p:message id="remarks_txt_msg" for="remarks_txt" />
+
+
+
+
+			<h:outputLabel value="#{msg['enityAdd.add.governrate']}"
+				style="font-weight:bold" />
+
+			<p:selectOneMenu id="governrate_cmb" filter="true" required="true"
+				filterMatchMode="contains"
+				requiredMessage="#{msg['enityAdd.valuerequired']}"
+				value="#{userManagedBean.userAddVO.governarateVO.id}" effect="fade"
+				style="width:168px">
+				<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+					itemValue="" />
+				<c:if test="#{languageBean.locale=='ar'}">
+					<f:selectItems value="#{referenceDataBean.governrateListNLS}" />
+				</c:if>
+				<c:if test="#{languageBean.locale=='en'}">
+					<f:selectItems value="#{referenceDataBean.governrateList}" />
+				</c:if>
+			</p:selectOneMenu>
+			<p:message for="governrate_cmb"></p:message>
+
+
+			<h:outputLabel value="#{msg['enityAdd.add.directorate']}"
+				style="font-weight:bold" />
+			<p:selectOneMenu id="entity_cmb" required="true"
+				requiredMessage="#{msg['userAdd.valuerequired']}"
+				value="#{userManagedBean.userAddVO.directorateVO.id}" effect="fade"
+				style="width:168px" filter="true" filterMatchMode="contains">
+				<f:selectItem itemLabel="#{msg['enityAdd.add.selectone']}"
+					itemValue="" />
+				<c:if test="#{languageBean.locale=='en'}">
+					<f:selectItems value="#{referenceDataBean.directorateList}" />
+				</c:if>
+				<c:if test="#{languageBean.locale=='ar'}">
+					<f:selectItems value="#{referenceDataBean.directorateListNLS}" />
+				</c:if>
+
+			</p:selectOneMenu>
+			<p:message id="entity_cmb_msg" for="entity_cmb" />
+
+			<h:inputHidden></h:inputHidden>
+			<h:panelGroup>
+				<c:if test="${userManagedBean.userAddVO.userId == null}">
+					<p:commandButton value="#{msg['userAdd.add.save']}"
+						icon="ui-icon-plus" process="@this,addGrid,messages"
+						update="messages,addGrid" action="#{userManagedBean.saveUser}" />
+				</c:if>
+				<c:if test="${userManagedBean.userAddVO.userId != null}">
+					<p:commandButton value="#{msg['userAdd.add.update']}"
+						icon="ui-icon-pencil" process="@this,addGrid,messages"
+						update="messages,addGrid" action="#{userManagedBean.updateUser}" />
+				</c:if>
+
+				<p:commandButton value="#{msg['userAdd.add.reset']}"
+					action="#{userManagedBean.resetUser}" icon="ui-icon-refresh"
+					update="@this,addGrid,messages" process="@this" style="align:left">
+					<p:resetInput target="addGrid,messages" />
+				</p:commandButton>
+			</h:panelGroup>
+
+
+		</p:panelGrid>
+
+
+
+
+	</h:form>
+
+</ui:composition>
